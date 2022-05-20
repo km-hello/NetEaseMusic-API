@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/mybatis-3-mapper.dtd">
+<mapper namespace="com.hello.neteasemusic.mapper.ToplistMapper">
+
+    <resultMap id="listMusicMap" type="com.hello.neteasemusic.entity.Toplist">
+        <id column="listId" property="listId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+
+        <collection property="musicList" javaType="java.util.List" ofType="com.hello.neteasemusic.entity.Music">
+            <id column="cmusicId" property="musicId" jdbcType="VARCHAR" />
+            <result column="cauthor" property="author" jdbcType="VARCHAR" />
+            <result column="cmusicUrl" property="musicUrl" jdbcType="VARCHAR" />
+            <result column="cimageUrl" property="imageUrl" jdbcType="VARCHAR" />
+            <result column="cname" property="name" jdbcType="VARCHAR" />
+            <result column="clistId" property="listId" jdbcType="VARCHAR" />
+        </collection>
+
+    </resultMap>
+
+    <select id="getToplistDetail" resultMap="listMusicMap" >
+        select
+            p.listId,
+            p.name,
+            p.imageUrl,
+            c.listId clistId,
+            c.musicId cmusicId,
+            c.name cname,
+            c.author cauthor,
+            c.imageUrl cimageUrl,
+            c.musicUrl cmusicUrl
+        from toplist as p,music as c where p.listId=c.listId and p.listId = ${listId}
+    </select>
+
+
+    <select id="getToplist" resultType="com.hello.neteasemusic.entity.Toplist">
+        SELECT * FROM toplist
+    </select>
+
+    <select id="getToplistDetailById" resultType="com.hello.neteasemusic.entity.Toplist">
+        SELECT * FROM toplist where listId=#{listId}
+    </select>
+
+    <select id="getListPage" resultType="com.hello.neteasemusic.entity.Toplist" parameterType="String">
+        SELECT * FROM toplist where name like '%${name}%'
+    </select>
+
+    <insert id="insertToplist"  parameterType="com.hello.neteasemusic.entity.Toplist"
+            keyProperty="listId" useGeneratedKeys="true" >
+        INSERT INTO toplist(name,listId,imageUrl)
+        VALUES (#{name, jdbcType=VARCHAR},#{listId, jdbcType=VARCHAR},#{imageUrl, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteToplist" parameterType="String">
+        delete from toplist where listId=#{listId}
+    </delete>
+
+    <update id="updateToplist" parameterType="com.hello.neteasemusic.entity.Toplist">
+        update toplist set toplist.name=#{name},toplist.listId=#{listId},toplist.imageUrl=#{imageUrl} where toplist.listId=#{listId}
+    </update>
+
+</mapper>

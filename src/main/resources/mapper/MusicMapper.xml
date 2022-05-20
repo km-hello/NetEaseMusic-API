@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/mybatis-3-mapper.dtd">
+<mapper namespace="com.hello.neteasemusic.mapper.MusicMapper">
+
+    <select id="getMusic" resultType="com.hello.neteasemusic.entity.Music">
+        SELECT * FROM music
+    </select>
+
+    <select id="getMusicDetail" resultType="com.hello.neteasemusic.entity.Music">
+        SELECT * FROM music where musicId=${musicId}
+    </select>
+
+    <select id="search" resultType="com.hello.neteasemusic.entity.Music" parameterType="String">
+        SELECT * FROM music where name like '%${name}%'
+    </select>
+
+    <insert id="insertMusic"  parameterType="com.hello.neteasemusic.entity.Music"
+            keyProperty="musicId" useGeneratedKeys="true" >
+        INSERT INTO music(name,author,musicId,listId,imageUrl,musicUrl,time)
+        VALUES (#{name, jdbcType=VARCHAR},#{author, jdbcType=VARCHAR}, #{musicId, jdbcType=VARCHAR},#{listId, jdbcType=VARCHAR},#{imageUrl, jdbcType=VARCHAR},#{musicUrl, jdbcType=VARCHAR},#{time, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteMusic" parameterType="String">
+        delete from music where musicId=#{musicId}
+    </delete>
+
+    <update id="updateMusic" parameterType="com.hello.neteasemusic.entity.Music">
+        update music set music.name=#{name},music.author=#{author},music.musicId=#{musicId},music.listId=#{listId},music.imageUrl=#{imageUrl},music.musicUrl=#{musicUrl},music.time=#{time} where music.musicId=#{musicId}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/mybatis-3-mapper.dtd">
+<mapper namespace="com.hello.neteasemusic.mapper.UserMapper">
+
+    <select id="login" resultType="com.hello.neteasemusic.entity.User" parameterType="String">
+        SELECT * FROM user where phone='${phone}' and password='${password}'
+    </select>
+
+    <select id="search" resultType="com.hello.neteasemusic.entity.User" parameterType="String">
+        SELECT * FROM user where nickName like '%${name}%'
+    </select>
+
+    <select id="getUserDetailByPhone" resultType="com.hello.neteasemusic.entity.User">
+        SELECT * FROM user where phone=${phone}
+    </select>
+
+    <insert id="insertUser"  parameterType="com.hello.neteasemusic.entity.User"
+            keyProperty="phone" useGeneratedKeys="true" >
+        INSERT INTO user(phone,password,nickName,imageUrl)
+        VALUES (#{phone, jdbcType=VARCHAR},#{password, jdbcType=VARCHAR}, #{nickName, jdbcType=VARCHAR},#{imageUrl, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteUser" parameterType="String">
+        delete from user where phone=#{phone}
+    </delete>
+
+    <update id="updateUser" parameterType="com.hello.neteasemusic.entity.User">
+        update user set user.phone=#{phone},user.password=#{password},user.nickName=#{nickName},user.imageUrl=#{imageUrl} where user.phone=#{phone}
+    </update>
+
+</mapper>

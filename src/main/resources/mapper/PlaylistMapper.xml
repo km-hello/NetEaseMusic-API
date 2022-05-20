@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/mybatis-3-mapper.dtd">
+<mapper namespace="com.hello.neteasemusic.mapper.PlaylistMapper">
+
+    <resultMap id="listMusicMap" type="com.hello.neteasemusic.entity.Playlist">
+        <id column="listId" property="listId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+
+        <collection property="musicList" javaType="java.util.List" ofType="com.hello.neteasemusic.entity.Music">
+            <id column="cmusicId" property="musicId" jdbcType="VARCHAR" />
+            <result column="cauthor" property="author" jdbcType="VARCHAR" />
+            <result column="cmusicUrl" property="musicUrl" jdbcType="VARCHAR" />
+            <result column="cimageUrl" property="imageUrl" jdbcType="VARCHAR" />
+            <result column="cname" property="name" jdbcType="VARCHAR" />
+            <result column="clistId" property="listId" jdbcType="VARCHAR" />
+        </collection>
+
+    </resultMap>
+
+    <select id="getListDetail" resultMap="listMusicMap" >
+        select
+            p.listId,
+            p.name,
+            p.imageUrl,
+            c.listId clistId,
+            c.musicId cmusicId,
+            c.name cname,
+            c.author cauthor,
+            c.imageUrl cimageUrl,
+            c.musicUrl cmusicUrl
+        from playlist as p,music as c where p.listId=c.listId and p.listId = ${listId}
+    </select>
+
+
+    <select id="getListPage" resultType="com.hello.neteasemusic.entity.Playlist" parameterType="String">
+        SELECT * FROM playlist where name like '%${name}%'
+    </select>
+
+    <select id="getPlaylist" resultType="com.hello.neteasemusic.entity.Playlist">
+        SELECT * FROM playlist
+    </select>
+
+    <select id="getPlaylistDetailById" resultType="com.hello.neteasemusic.entity.Playlist">
+        SELECT * FROM playlist where listId=#{listId}
+    </select>
+
+    <insert id="insertPlaylist"  parameterType="com.hello.neteasemusic.entity.Playlist"
+            keyProperty="listId" useGeneratedKeys="true" >
+        INSERT INTO playlist(name,listId,imageUrl)
+        VALUES (#{name, jdbcType=VARCHAR},#{listId, jdbcType=VARCHAR},#{imageUrl, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deletePlaylist" parameterType="String">
+        delete from playlist where listId=#{listId}
+    </delete>
+
+    <update id="updatePlaylist" parameterType="com.hello.neteasemusic.entity.Playlist">
+        update playlist set playlist.name=#{name},playlist.listId=#{listId},playlist.imageUrl=#{imageUrl} where playlist.listId=#{listId}
+    </update>
+
+</mapper>

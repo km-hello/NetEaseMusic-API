@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/mybatis-3-mapper.dtd">
+<mapper namespace="com.hello.neteasemusic.mapper.VideoMapper">
+
+    <select id="getVideoList" resultType="com.hello.neteasemusic.entity.Video" parameterType="String">
+        SELECT * FROM video WHERE groupId=${groupId}
+    </select>
+
+    <select id="search" resultType="com.hello.neteasemusic.entity.Video" parameterType="String">
+        SELECT * FROM video where title like '%${name}%'
+    </select>
+
+    <select id="getVideoDetailById" resultType="com.hello.neteasemusic.entity.Video">
+        SELECT * FROM video where videoId=${videoId}
+    </select>
+
+    <insert id="insertVideo"  parameterType="com.hello.neteasemusic.entity.Video"
+            keyProperty="videoId" useGeneratedKeys="true" >
+        INSERT INTO video(title,videoId,groupId,imageUrl,videoUrl,creatorName)
+        VALUES (#{title, jdbcType=VARCHAR},#{videoId, jdbcType=VARCHAR}, #{groupId, jdbcType=VARCHAR},#{imageUrl, jdbcType=VARCHAR},#{videoUrl, jdbcType=VARCHAR},#{creatorName, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteVideo" parameterType="String">
+        delete from video where videoId=#{videoId}
+    </delete>
+
+    <update id="updateVideo" parameterType="com.hello.neteasemusic.entity.Video">
+        update video set video.title=#{title},video.videoId=#{videoId},video.groupId=#{groupId},video.imageUrl=#{imageUrl},video.videoUrl=#{videoUrl},video.creatorName=#{creatorName} where video.videoId=#{videoId}
+    </update>
+
+
+</mapper>
